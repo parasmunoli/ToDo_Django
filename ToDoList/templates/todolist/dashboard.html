@@ -1,0 +1,54 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDo App</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'todolist/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h2>Welcome, {{ user.username }}</h2>
+            <nav>
+                <button><a href="{% url 'logout' %}" class="logout-btn">Logout</a></button>
+            </nav>
+        </header>
+
+        <section class="task-form">
+            <h3>Your Tasks</h3>
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" name="add_task" class="add-task-btn">Add Task</button>
+            </form>
+        </section>
+
+        <section class="task-list">
+            <ul>
+                {% for task in tasks %}
+                    <li class="task-item">
+                        <form method="POST" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="task_id" value="{{ task.taskID }}">
+                            <input type="hidden" name="toggle_task" value="1">
+                            <input 
+                                type="checkbox" 
+                                name="completed" 
+                                onchange="this.form.submit()" 
+                                {% if task.completed %}checked{% endif %}
+                            >
+                            <span class="task-text {% if task.completed %}completed{% endif %}">
+                                <strong>{{ task.title }}</strong>: {{ task.content }}
+                            </span>
+                        </form>
+                    </li>
+                {% empty %}
+                    <li class="no-tasks">No tasks found.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </div>
+</body>
+</html>

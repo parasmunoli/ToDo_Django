@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDo App</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'todolist/style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h2>Login</h2>
+        {% if error %}<p style="color:red">{{ error }}</p>{% endif %}
+        <form method="POST">{% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Login</button>
+        </form>
+        <a href="{% url 'signup' %}">Create an account</a>
+    </div>
+</body>
+</html>
